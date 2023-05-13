@@ -36,7 +36,7 @@ input - f3dca8108d7b5620024df8dc097d7630b60d8877271d5cf20459995739e76d20:1
 
 ## Contributing
 
-1. Fork it!
+1. Fork it! If you like it, it will be better.
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`

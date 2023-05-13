@@ -14,6 +14,7 @@ TX_MULTISIG    = 'multi-sig'
 # ===----------------------------------------------------------------------===
 
 # push value
+# https://wiki.bitcoinsv.io/index.php/Opcodes_used_in_Bitcoin_Script
 OP_0         = 0x00
 OP_FALSE     = OP_0
 # Please note from 00~4b (75) are push data byte length.

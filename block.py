@@ -5,6 +5,7 @@ import os
 import mmap
 
 class BlockFile:
+    """The block file class, which holds a file pointer."""
     def __init__(self, block_filename):
         self.block_filename = block_filename
         with open(block_filename, 'rb', buffering=16 * 1024 * 1024) as f:
@@ -66,9 +67,9 @@ class Block:
             self.txs = []
         else:
             self.is_ready = False
-
         self.tx_pos = self.blockchain.tell()
-
+        
+        # Parse all the TX in the block here.
         for i in range(0, self.tx_count):
             tx = Tx(self.blockchain)
             self.txs.append(tx)
@@ -183,7 +184,7 @@ class TxInput:
         self.script_raw = blockchain.read(self.script_len)
         self.seqNo = uint4(blockchain)
         # coinbase's script is arbitary.
-        if self.prev_hash == "0000000000000000000000000000000000000000000000000000000000000000":
+        if 0xffffffff == self.tx_outId:  # Coinbase
             self.segments = hashStr(self.script_raw)
         else:
             self.segments = segment(self.script_raw)
@@ -198,9 +199,10 @@ class TxInput:
         sb.append("  Sequence: %8x" % self.seqNo)
         return sb
 
-    def decode_script_sig(self, data):
+    def decode_script_sig(self, script_raw:bytes):
+        """ Custom logic here. """
         sb = []
-        self.hex_str = hashStr(data)
+        self.hex_str = hashStr(script_raw)
         # segwit
         if len(self.hex_str) == 0:
             self.pub_key = ""
@@ -222,7 +224,6 @@ class TxInput:
 
     def decode_out_idx(self, idx):
         sb = []
-        s = ""
         if idx == 0xffffffff:
             sb.append("  [Coinbase] Text: %s" % self.prev_hash)
         else:
@@ -249,7 +250,7 @@ class TxOutput:
         sb.append("Addr: %s" % self.addr)
         return sb
 
-    def decode_script_sig(self, script_raw):
+    def decode_script_sig(self, script_raw:bytes):
         ''' Custom analysis logic here. '''
         hexstr = hashStr(script_raw)
         self.hex_str = hexstr
