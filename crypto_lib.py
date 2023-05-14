@@ -4,6 +4,7 @@
 import hashlib
 import base58
 import struct
+import ripemd
 
 from crypto_op import *
 
@@ -95,7 +96,7 @@ def hash160(hex_str):
     See 'compressed form' at https://en.bitcoin.it/wiki/Protocol_documentation#Signatures
     """
     sha = hashlib.sha256()
-    rip = hashlib.new('ripemd160')
+    rip = ripemd.RIPEMD160()
     sha.update(hex_str)
     rip.update(sha.digest())
     return rip.hexdigest()  # .hexdigest() is hex ASCII
@@ -147,11 +148,3 @@ def segment(raw_script):
             op_list.append(error)
     return op_list
             
-# address = RIPEMD160(SHA256(pubKey))
-# Genesis 
-# 04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f
-# 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-# https://www.blockchain.com/btc/address/1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-if __name__ == '__main__':
-    print(segment(bytes.fromhex("76a9141974262d0e27ba2b49e566e6191922cba6bacd1d88ac")))
-    print(segment(bytes.fromhex("4830450221008ecb5ab06e62a67e320880db70ee8a7020503a055d7c45b73dcc41adf01ea9f602203a0d8f4314342636a6a473fc0b4dd4e49b62be288f0a4d5a23a8f488a768fa9b012103dd8763f8c3db6b77bee743ddafd33c969a99cde9278deb441b09ad7c14cf740f")))
